@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <!-- ページタイトル（JSで上書き） -->
+  <title id="pageTitle">ダミータイトル</title>
+  
+  <!-- OGP用メタタグ -->
+  <meta property="og:title" content="ダミータイトル" id="ogTitle">
+  <meta property="og:description" content="ここにダミーの説明文が入ります">
+  <meta property="og:image" content="http://example.com/dummy-image.jpg">
+  <meta property="og:url" content="http://example.com/">
+  <!-- 必要に応じてその他のOGPパラメータも追加 -->
+  
+  <!-- ビューポート設定など -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <!-- ページ内でタイトルを表示 -->
+  <h1 id="mainTitle">ダミータイトル</h1>
+  
+  <script>
+    /**
+     * URL のクエリパラメータから指定したキーの値を取得する関数
+     * @param {string} key - 取得するパラメータ名
+     * @returns {string|null} パラメータの値（存在しない場合は null）
+     */
+    function getQueryParam(key) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(key);
+    }
+
+    // クエリパラメータ 'title' を取得（存在しなければ 'Default Title' を使用）
+    const titleParam = getQueryParam('title') || 'Default Title';
+
+    // ページタイトル（ブラウザのタブに表示されるタイトル）を更新
+    document.getElementById('pageTitle').textContent = titleParam;
+    // OGP用のタイトルも更新
+    document.getElementById('ogTitle').setAttribute('content', titleParam);
+    // ページ内の見出しも更新
+    document.getElementById('mainTitle').textContent = titleParam;
+  </script>
+</body>
+</html>
