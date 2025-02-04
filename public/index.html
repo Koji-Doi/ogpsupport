@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <!-- ページタイトル（JSで上書き） -->
+  <!-- ページタイトル（JavaScriptで更新） -->
   <title id="pageTitle">ダミータイトル</title>
   
   <!-- OGP用メタタグ -->
@@ -10,13 +10,12 @@
   <meta property="og:description" content="ここにダミーの説明文が入ります">
   <meta property="og:image" content="http://example.com/dummy-image.jpg">
   <meta property="og:url" content="http://example.com/">
-  <!-- 必要に応じてその他のOGPパラメータも追加 -->
   
-  <!-- ビューポート設定など -->
+  <!-- ビューポート設定 -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-  <!-- ページ内でタイトルを表示 -->
+  <!-- ページ内見出し -->
   <h1 id="mainTitle">ダミータイトル</h1>
   
   <script>
@@ -30,15 +29,47 @@
       return urlParams.get(key);
     }
 
-    // クエリパラメータ 'title' を取得（存在しなければ 'Default Title' を使用）
+    // --- タイトル更新処理 ---
     const titleParam = getQueryParam('title') || 'Default Title';
-
-    // ページタイトル（ブラウザのタブに表示されるタイトル）を更新
     document.getElementById('pageTitle').textContent = titleParam;
-    // OGP用のタイトルも更新
     document.getElementById('ogTitle').setAttribute('content', titleParam);
-    // ページ内の見出しも更新
     document.getElementById('mainTitle').textContent = titleParam;
+
+    // --- URLパラメータに基づく出力処理 ---
+    const urlParam = getQueryParam('url');
+    if (urlParam) {
+      // プロトコルが含まれていない場合、https:// を自動付加
+      let displayUrl = urlParam;
+      if (!/^https?:\/\//i.test(displayUrl)) {
+        displayUrl = 'https://' + displayUrl;
+      }
+      // 指定のリンク要素を生成して<body>内に追加
+      const container = document.createElement('div');
+      container.innerHTML = `<p><a href="${displayUrl}">指定サイト</a>に移動します。</p>`;
+      document.body.appendChild(container);
+    } else {
+      // urlパラメータが指定されていない場合、使い方の説明を表示
+      const instructions = document.createElement('div');
+      instructions.style.marginTop = '20px';
+      instructions.innerHTML = `
+        <h2>このサイトの使い方</h2>
+        <p>このサイトは、ウェブページのタイトルやリンク先のサイトを簡単に設定できるサービスです。</p>
+        <p>利用できるパラメータは以下の通りです：</p>
+        <ul>
+          <li>
+            <strong>title</strong>：ページのタイトルを設定します。<br>
+            例: <code>?title=あなたの好きなタイトル</code>
+          </li>
+          <li>
+            <strong>url</strong>：リンク先のサイトのURLを設定します。<br>
+            例: <code>?url=https://xxx.site</code>
+          </li>
+        </ul>
+        <p>例えば、<code>https://example.com/?title=こんにちは&url=https://xxx.site</code> のように入力すると、<br>
+           ページのタイトルが「こんにちは」に変わり、下のリンクをクリックすると指定されたサイトに移動します。</p>
+      `;
+      document.body.appendChild(instructions);
+    }
   </script>
 </body>
 </html>
